@@ -12,3 +12,10 @@ C:\Users\kesgr\Source\Repos\CentroSalud.NET\Logica\obj\Debug\Logica.csprojAssemb
 C:\Users\kesgr\Source\Repos\CentroSalud.NET\Logica\obj\Debug\Logica.csproj.CoreCompileInputs.cache
 C:\Users\kesgr\Source\Repos\CentroSalud.NET\Logica\obj\Debug\Logica.dll
 C:\Users\kesgr\Source\Repos\CentroSalud.NET\Logica\obj\Debug\Logica.pdb
+C:\Users\kesgr\source\repos\CasoEstudio.NET\Logica\bin\Debug\Logica.dll.config
+C:\Users\kesgr\source\repos\CasoEstudio.NET\Logica\bin\Debug\Logica.dll
+C:\Users\kesgr\source\repos\CasoEstudio.NET\Logica\bin\Debug\Logica.pdb
+C:\Users\kesgr\source\repos\CasoEstudio.NET\Logica\obj\Debug\Logica.csprojAssemblyReference.cache
+C:\Users\kesgr\source\repos\CasoEstudio.NET\Logica\obj\Debug\Logica.csproj.CoreCompileInputs.cache
+C:\Users\kesgr\source\repos\CasoEstudio.NET\Logica\obj\Debug\Logica.dll
+C:\Users\kesgr\source\repos\CasoEstudio.NET\Logica\obj\Debug\Logica.pdb

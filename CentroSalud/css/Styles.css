@@ -1,0 +1,61 @@
+﻿
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Dosis', sans-serif;
+}
+
+.oculto {
+    display: none;
+}
+
+.displayRowCC {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.displayRowSbC {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.img-logo {
+    background-color: #fff;
+    border-radius: 100%;
+    padding: 0.3rem;
+    border: 1px solid black;
+}
+
+.card {
+    position: relative;
+}
+
+.falseLink {
+    border: none;
+    padding: 0;
+    background: none;
+}
+
+.btn-RVS {
+    padding: 0.3rem 1rem !important;
+    background: none;
+    border: none !important;
+    outline: none !important;
+    color: #000 !important;
+    text-decoration: none !important;
+    transition: all linear 400ms;
+}
+
+    .btn-RVS:hover {
+        background-color: #198754;
+        color: #fff !important;
+        border-radius: 15px;
+    }

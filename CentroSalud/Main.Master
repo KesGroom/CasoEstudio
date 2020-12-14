@@ -1,0 +1,47 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Main.Master.cs" Inherits="CentroSalud.App" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>RVS</title>
+    <link href="img/Health-logo.png" rel="shorcut icon" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <link href="css/Styles.css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Dosis&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/11c72a119e.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script src="js/Alertas.js"></script>
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-light  sticky-top border-bottom border-success border-2">
+        <div class="container-fluid container displayRowCC">
+            <a class="navbar-brand displayRowCC" href="#" style="width: 24%;">
+                <img src="img/Health-logo.png" alt="" width="40" height="40" class="d-inline-block align-top me-2 img-logo">
+                <div class="text-dark">Red Vallecaucana de salud</div>
+            </a>
+            <div class="displayRowSbC">
+                <a href="Enfermedades.aspx" class="btn-RVS displayRowCC"><i class="fas fa-book-medical me-2"></i> Enciclopedia de enfermedades</a>
+                <asp:ContentPlaceHolder ID="lateral" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+        </div>
+    </nav>
+    <div>
+        <asp:ContentPlaceHolder ID="content" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+
+    <footer class="bg-dark text-light text-end" style="padding: 0.5rem 2.5rem; width: 100%; position:fixed; bottom: 0;">
+        Derechos reservados Red Vallecaucana de salud © 2020
+    </footer>
+    <asp:ContentPlaceHolder ID="script" runat="server">
+    </asp:ContentPlaceHolder>
+</body>
+</html>

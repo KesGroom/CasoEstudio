@@ -22,7 +22,7 @@ namespace Logica
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="SaludValle")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="BDSalud")]
 	public partial class ORMDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -51,9 +51,6 @@ namespace Logica
     partial void Insertespecialista(especialista instance);
     partial void Updateespecialista(especialista instance);
     partial void Deleteespecialista(especialista instance);
-    partial void Insertgenerador_contenido(generador_contenido instance);
-    partial void Updategenerador_contenido(generador_contenido instance);
-    partial void Deletegenerador_contenido(generador_contenido instance);
     partial void Insertpersona(persona instance);
     partial void Updatepersona(persona instance);
     partial void Deletepersona(persona instance);
@@ -66,7 +63,7 @@ namespace Logica
     #endregion
 		
 		public ORMDataContext() : 
-				base(global::Logica.Properties.Settings.Default.SaludValleConnectionString1, mappingSource)
+				base(global::Logica.Properties.Settings.Default.BDSaludConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -151,14 +148,6 @@ namespace Logica
 			}
 		}
 		
-		public System.Data.Linq.Table<generador_contenido> generador_contenido
-		{
-			get
-			{
-				return this.GetTable<generador_contenido>();
-			}
-		}
-		
 		public System.Data.Linq.Table<persona> persona
 		{
 			get
@@ -184,7 +173,7 @@ namespace Logica
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.sp_login")]
-		public ISingleResult<sp_loginResult> sp_login([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> cedula, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string contrasenia)
+		public ISingleResult<sp_loginResult> sp_login([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(30)")] string cedula, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string contrasenia)
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), cedula, contrasenia);
 			return ((ISingleResult<sp_loginResult>)(result.ReturnValue));
@@ -199,17 +188,15 @@ namespace Logica
 		
 		private int _id_cita;
 		
-		private System.Nullable<int> _id_persona;
+		private string _id_persona;
 		
 		private int _id_especialista;
 		
-		private string _fecha_cita;
+		private System.DateTime _fecha_cita;
 		
 		private System.TimeSpan _hora_cita;
 		
 		private System.Nullable<int> _calificacion;
-		
-		private string _estado;
 		
 		private EntityRef<especialista> _especialista;
 		
@@ -221,18 +208,16 @@ namespace Logica
     partial void OnCreated();
     partial void Onid_citaChanging(int value);
     partial void Onid_citaChanged();
-    partial void Onid_personaChanging(System.Nullable<int> value);
+    partial void Onid_personaChanging(string value);
     partial void Onid_personaChanged();
     partial void Onid_especialistaChanging(int value);
     partial void Onid_especialistaChanged();
-    partial void Onfecha_citaChanging(string value);
+    partial void Onfecha_citaChanging(System.DateTime value);
     partial void Onfecha_citaChanged();
     partial void Onhora_citaChanging(System.TimeSpan value);
     partial void Onhora_citaChanged();
     partial void OncalificacionChanging(System.Nullable<int> value);
     partial void OncalificacionChanged();
-    partial void OnestadoChanging(string value);
-    partial void OnestadoChanged();
     #endregion
 		
 		public cita()
@@ -262,8 +247,8 @@ namespace Logica
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_persona", DbType="Int")]
-		public System.Nullable<int> id_persona
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_persona", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string id_persona
 		{
 			get
 			{
@@ -310,8 +295,8 @@ namespace Logica
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fecha_cita", DbType="VarChar(30)")]
-		public string fecha_cita
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fecha_cita", DbType="Date NOT NULL")]
+		public System.DateTime fecha_cita
 		{
 			get
 			{
@@ -370,27 +355,7 @@ namespace Logica
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_estado", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string estado
-		{
-			get
-			{
-				return this._estado;
-			}
-			set
-			{
-				if ((this._estado != value))
-				{
-					this.OnestadoChanging(value);
-					this.SendPropertyChanging();
-					this._estado = value;
-					this.SendPropertyChanged("estado");
-					this.OnestadoChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="especialista_cita", Storage="_especialista", ThisKey="id_especialista", OtherKey="id_persona", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="especialista_cita", Storage="_especialista", ThisKey="id_especialista", OtherKey="id_especialista", IsForeignKey=true)]
 		public especialista especialista
 		{
 			get
@@ -413,7 +378,7 @@ namespace Logica
 					if ((value != null))
 					{
 						value.cita.Add(this);
-						this._id_especialista = value.id_persona;
+						this._id_especialista = value.id_especialista;
 					}
 					else
 					{
@@ -451,7 +416,7 @@ namespace Logica
 					}
 					else
 					{
-						this._id_persona = default(Nullable<int>);
+						this._id_persona = default(string);
 					}
 					this.SendPropertyChanged("persona");
 				}
@@ -745,6 +710,8 @@ namespace Logica
 		
 		private string _nombre;
 		
+		private string _descripcion;
+		
 		private EntitySet<enfermedad_sintoma> _enfermedad_sintoma;
 		
 		private EntitySet<recomendacion> _recomendacion;
@@ -757,6 +724,8 @@ namespace Logica
     partial void Onid_enfermedadChanged();
     partial void OnnombreChanging(string value);
     partial void OnnombreChanged();
+    partial void OndescripcionChanging(string value);
+    partial void OndescripcionChanged();
     #endregion
 		
 		public enfermedad()
@@ -786,7 +755,7 @@ namespace Logica
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_nombre", DbType="VarChar(30)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_nombre", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
 		public string nombre
 		{
 			get
@@ -802,6 +771,26 @@ namespace Logica
 					this._nombre = value;
 					this.SendPropertyChanged("nombre");
 					this.OnnombreChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_descripcion", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string descripcion
+		{
+			get
+			{
+				return this._descripcion;
+			}
+			set
+			{
+				if ((this._descripcion != value))
+				{
+					this.OndescripcionChanging(value);
+					this.SendPropertyChanging();
+					this._descripcion = value;
+					this.SendPropertyChanged("descripcion");
+					this.OndescripcionChanged();
 				}
 			}
 		}
@@ -1075,7 +1064,7 @@ namespace Logica
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _nit;
+		private string _nit;
 		
 		private string _razon_social;
 		
@@ -1091,15 +1080,15 @@ namespace Logica
 		
 		private EntitySet<especialista> _especialista;
 		
-		private EntitySet<generador_contenido> _generador_contenido;
-		
 		private EntityRef<ciudad> _ciudad;
+		
+		private EntityRef<persona> _persona;
 		
     #region Definiciones de métodos de extensibilidad
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnnitChanging(int value);
+    partial void OnnitChanging(string value);
     partial void OnnitChanged();
     partial void Onrazon_socialChanging(string value);
     partial void Onrazon_socialChanged();
@@ -1118,13 +1107,13 @@ namespace Logica
 		public ente_salud()
 		{
 			this._especialista = new EntitySet<especialista>(new Action<especialista>(this.attach_especialista), new Action<especialista>(this.detach_especialista));
-			this._generador_contenido = new EntitySet<generador_contenido>(new Action<generador_contenido>(this.attach_generador_contenido), new Action<generador_contenido>(this.detach_generador_contenido));
 			this._ciudad = default(EntityRef<ciudad>);
+			this._persona = default(EntityRef<persona>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_nit", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int nit
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_nit", DbType="VarChar(30) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string nit
 		{
 			get
 			{
@@ -1143,7 +1132,7 @@ namespace Logica
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_razon_social", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_razon_social", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string razon_social
 		{
 			get
@@ -1174,6 +1163,10 @@ namespace Logica
 			{
 				if ((this._representante != value))
 				{
+					if (this._persona.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnrepresentanteChanging(value);
 					this.SendPropertyChanging();
 					this._representante = value;
@@ -1203,7 +1196,7 @@ namespace Logica
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sitio_web", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_sitio_web", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string sitio_web
 		{
 			get
@@ -1280,19 +1273,6 @@ namespace Logica
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ente_salud_generador_contenido", Storage="_generador_contenido", ThisKey="nit", OtherKey="id_ente_salud")]
-		public EntitySet<generador_contenido> generador_contenido
-		{
-			get
-			{
-				return this._generador_contenido;
-			}
-			set
-			{
-				this._generador_contenido.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ciudad_ente_salud", Storage="_ciudad", ThisKey="id_cuidad", OtherKey="id_ciudad", IsForeignKey=true)]
 		public ciudad ciudad
 		{
@@ -1323,6 +1303,40 @@ namespace Logica
 						this._id_cuidad = default(int);
 					}
 					this.SendPropertyChanged("ciudad");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="persona_ente_salud", Storage="_persona", ThisKey="representante", OtherKey="cedula", IsForeignKey=true)]
+		public persona persona
+		{
+			get
+			{
+				return this._persona.Entity;
+			}
+			set
+			{
+				persona previousValue = this._persona.Entity;
+				if (((previousValue != value) 
+							|| (this._persona.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._persona.Entity = null;
+						previousValue.ente_salud.Remove(this);
+					}
+					this._persona.Entity = value;
+					if ((value != null))
+					{
+						value.ente_salud.Add(this);
+						this._representante = value.cedula;
+					}
+					else
+					{
+						this._representante = default(string);
+					}
+					this.SendPropertyChanged("persona");
 				}
 			}
 		}
@@ -1358,18 +1372,6 @@ namespace Logica
 			this.SendPropertyChanging();
 			entity.ente_salud = null;
 		}
-		
-		private void attach_generador_contenido(generador_contenido entity)
-		{
-			this.SendPropertyChanging();
-			entity.ente_salud = this;
-		}
-		
-		private void detach_generador_contenido(generador_contenido entity)
-		{
-			this.SendPropertyChanging();
-			entity.ente_salud = null;
-		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.especialista")]
@@ -1378,11 +1380,13 @@ namespace Logica
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _id_persona;
+		private int _id_especialista;
+		
+		private string _id_persona;
 		
 		private int _id_ciudad;
 		
-		private System.Nullable<int> _id_ente_salud;
+		private string _id_ente_salud;
 		
 		private string _numero_de_licencia_de_salud;
 		
@@ -1396,15 +1400,19 @@ namespace Logica
 		
 		private EntityRef<ente_salud> _ente_salud;
 		
+		private EntityRef<persona> _persona;
+		
     #region Definiciones de métodos de extensibilidad
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void Onid_personaChanging(int value);
+    partial void Onid_especialistaChanging(int value);
+    partial void Onid_especialistaChanged();
+    partial void Onid_personaChanging(string value);
     partial void Onid_personaChanged();
     partial void Onid_ciudadChanging(int value);
     partial void Onid_ciudadChanged();
-    partial void Onid_ente_saludChanging(System.Nullable<int> value);
+    partial void Onid_ente_saludChanging(string value);
     partial void Onid_ente_saludChanged();
     partial void Onnumero_de_licencia_de_saludChanging(string value);
     partial void Onnumero_de_licencia_de_saludChanged();
@@ -1419,11 +1427,32 @@ namespace Logica
 			this._cita = new EntitySet<cita>(new Action<cita>(this.attach_cita), new Action<cita>(this.detach_cita));
 			this._ciudad = default(EntityRef<ciudad>);
 			this._ente_salud = default(EntityRef<ente_salud>);
+			this._persona = default(EntityRef<persona>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_persona", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int id_persona
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_especialista", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int id_especialista
+		{
+			get
+			{
+				return this._id_especialista;
+			}
+			set
+			{
+				if ((this._id_especialista != value))
+				{
+					this.Onid_especialistaChanging(value);
+					this.SendPropertyChanging();
+					this._id_especialista = value;
+					this.SendPropertyChanged("id_especialista");
+					this.Onid_especialistaChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_persona", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string id_persona
 		{
 			get
 			{
@@ -1433,6 +1462,10 @@ namespace Logica
 			{
 				if ((this._id_persona != value))
 				{
+					if (this._persona.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.Onid_personaChanging(value);
 					this.SendPropertyChanging();
 					this._id_persona = value;
@@ -1466,8 +1499,8 @@ namespace Logica
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_ente_salud", DbType="Int")]
-		public System.Nullable<int> id_ente_salud
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_ente_salud", DbType="VarChar(30)")]
+		public string id_ente_salud
 		{
 			get
 			{
@@ -1550,7 +1583,7 @@ namespace Logica
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="especialista_cita", Storage="_cita", ThisKey="id_persona", OtherKey="id_especialista")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="especialista_cita", Storage="_cita", ThisKey="id_especialista", OtherKey="id_especialista")]
 		public EntitySet<cita> cita
 		{
 			get
@@ -1624,9 +1657,43 @@ namespace Logica
 					}
 					else
 					{
-						this._id_ente_salud = default(Nullable<int>);
+						this._id_ente_salud = default(string);
 					}
 					this.SendPropertyChanged("ente_salud");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="persona_especialista", Storage="_persona", ThisKey="id_persona", OtherKey="cedula", IsForeignKey=true)]
+		public persona persona
+		{
+			get
+			{
+				return this._persona.Entity;
+			}
+			set
+			{
+				persona previousValue = this._persona.Entity;
+				if (((previousValue != value) 
+							|| (this._persona.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._persona.Entity = null;
+						previousValue.especialista.Remove(this);
+					}
+					this._persona.Entity = value;
+					if ((value != null))
+					{
+						value.especialista.Add(this);
+						this._id_persona = value.cedula;
+					}
+					else
+					{
+						this._id_persona = default(string);
+					}
+					this.SendPropertyChanged("persona");
 				}
 			}
 		}
@@ -1664,205 +1731,13 @@ namespace Logica
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.generador_contenido")]
-	public partial class generador_contenido : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _id_generador_contenido;
-		
-		private int _id_persona;
-		
-		private int _id_ente_salud;
-		
-		private EntityRef<ente_salud> _ente_salud;
-		
-		private EntityRef<persona> _persona;
-		
-    #region Definiciones de métodos de extensibilidad
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void Onid_generador_contenidoChanging(int value);
-    partial void Onid_generador_contenidoChanged();
-    partial void Onid_personaChanging(int value);
-    partial void Onid_personaChanged();
-    partial void Onid_ente_saludChanging(int value);
-    partial void Onid_ente_saludChanged();
-    #endregion
-		
-		public generador_contenido()
-		{
-			this._ente_salud = default(EntityRef<ente_salud>);
-			this._persona = default(EntityRef<persona>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_generador_contenido", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int id_generador_contenido
-		{
-			get
-			{
-				return this._id_generador_contenido;
-			}
-			set
-			{
-				if ((this._id_generador_contenido != value))
-				{
-					this.Onid_generador_contenidoChanging(value);
-					this.SendPropertyChanging();
-					this._id_generador_contenido = value;
-					this.SendPropertyChanged("id_generador_contenido");
-					this.Onid_generador_contenidoChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_persona", DbType="Int NOT NULL")]
-		public int id_persona
-		{
-			get
-			{
-				return this._id_persona;
-			}
-			set
-			{
-				if ((this._id_persona != value))
-				{
-					if (this._persona.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onid_personaChanging(value);
-					this.SendPropertyChanging();
-					this._id_persona = value;
-					this.SendPropertyChanged("id_persona");
-					this.Onid_personaChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_ente_salud", DbType="Int NOT NULL")]
-		public int id_ente_salud
-		{
-			get
-			{
-				return this._id_ente_salud;
-			}
-			set
-			{
-				if ((this._id_ente_salud != value))
-				{
-					if (this._ente_salud.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onid_ente_saludChanging(value);
-					this.SendPropertyChanging();
-					this._id_ente_salud = value;
-					this.SendPropertyChanged("id_ente_salud");
-					this.Onid_ente_saludChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ente_salud_generador_contenido", Storage="_ente_salud", ThisKey="id_ente_salud", OtherKey="nit", IsForeignKey=true)]
-		public ente_salud ente_salud
-		{
-			get
-			{
-				return this._ente_salud.Entity;
-			}
-			set
-			{
-				ente_salud previousValue = this._ente_salud.Entity;
-				if (((previousValue != value) 
-							|| (this._ente_salud.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._ente_salud.Entity = null;
-						previousValue.generador_contenido.Remove(this);
-					}
-					this._ente_salud.Entity = value;
-					if ((value != null))
-					{
-						value.generador_contenido.Add(this);
-						this._id_ente_salud = value.nit;
-					}
-					else
-					{
-						this._id_ente_salud = default(int);
-					}
-					this.SendPropertyChanged("ente_salud");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="persona_generador_contenido", Storage="_persona", ThisKey="id_persona", OtherKey="cedula", IsForeignKey=true)]
-		public persona persona
-		{
-			get
-			{
-				return this._persona.Entity;
-			}
-			set
-			{
-				persona previousValue = this._persona.Entity;
-				if (((previousValue != value) 
-							|| (this._persona.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._persona.Entity = null;
-						previousValue.generador_contenido.Remove(this);
-					}
-					this._persona.Entity = value;
-					if ((value != null))
-					{
-						value.generador_contenido.Add(this);
-						this._id_persona = value.cedula;
-					}
-					else
-					{
-						this._id_persona = default(int);
-					}
-					this.SendPropertyChanged("persona");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.persona")]
 	public partial class persona : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _cedula;
+		private string _cedula;
 		
 		private int _id_rol;
 		
@@ -1878,7 +1753,9 @@ namespace Logica
 		
 		private EntitySet<cita> _cita;
 		
-		private EntitySet<generador_contenido> _generador_contenido;
+		private EntitySet<ente_salud> _ente_salud;
+		
+		private EntitySet<especialista> _especialista;
 		
 		private EntityRef<rol> _rol;
 		
@@ -1886,7 +1763,7 @@ namespace Logica
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OncedulaChanging(int value);
+    partial void OncedulaChanging(string value);
     partial void OncedulaChanged();
     partial void Onid_rolChanging(int value);
     partial void Onid_rolChanged();
@@ -1905,13 +1782,14 @@ namespace Logica
 		public persona()
 		{
 			this._cita = new EntitySet<cita>(new Action<cita>(this.attach_cita), new Action<cita>(this.detach_cita));
-			this._generador_contenido = new EntitySet<generador_contenido>(new Action<generador_contenido>(this.attach_generador_contenido), new Action<generador_contenido>(this.detach_generador_contenido));
+			this._ente_salud = new EntitySet<ente_salud>(new Action<ente_salud>(this.attach_ente_salud), new Action<ente_salud>(this.detach_ente_salud));
+			this._especialista = new EntitySet<especialista>(new Action<especialista>(this.attach_especialista), new Action<especialista>(this.detach_especialista));
 			this._rol = default(EntityRef<rol>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_cedula", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int cedula
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_cedula", DbType="VarChar(30) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string cedula
 		{
 			get
 			{
@@ -2067,16 +1945,29 @@ namespace Logica
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="persona_generador_contenido", Storage="_generador_contenido", ThisKey="cedula", OtherKey="id_persona")]
-		public EntitySet<generador_contenido> generador_contenido
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="persona_ente_salud", Storage="_ente_salud", ThisKey="cedula", OtherKey="representante")]
+		public EntitySet<ente_salud> ente_salud
 		{
 			get
 			{
-				return this._generador_contenido;
+				return this._ente_salud;
 			}
 			set
 			{
-				this._generador_contenido.Assign(value);
+				this._ente_salud.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="persona_especialista", Storage="_especialista", ThisKey="cedula", OtherKey="id_persona")]
+		public EntitySet<especialista> especialista
+		{
+			get
+			{
+				return this._especialista;
+			}
+			set
+			{
+				this._especialista.Assign(value);
 			}
 		}
 		
@@ -2146,13 +2037,25 @@ namespace Logica
 			entity.persona = null;
 		}
 		
-		private void attach_generador_contenido(generador_contenido entity)
+		private void attach_ente_salud(ente_salud entity)
 		{
 			this.SendPropertyChanging();
 			entity.persona = this;
 		}
 		
-		private void detach_generador_contenido(generador_contenido entity)
+		private void detach_ente_salud(ente_salud entity)
+		{
+			this.SendPropertyChanging();
+			entity.persona = null;
+		}
+		
+		private void attach_especialista(especialista entity)
+		{
+			this.SendPropertyChanging();
+			entity.persona = this;
+		}
+		
+		private void detach_especialista(especialista entity)
 		{
 			this.SendPropertyChanging();
 			entity.persona = null;
@@ -2427,7 +2330,7 @@ namespace Logica
 	public partial class sp_loginResult
 	{
 		
-		private int _cedula;
+		private string _cedula;
 		
 		private int _id_rol;
 		
@@ -2445,8 +2348,8 @@ namespace Logica
 		{
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_cedula", DbType="Int NOT NULL")]
-		public int cedula
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_cedula", DbType="VarChar(30) NOT NULL", CanBeNull=false)]
+		public string cedula
 		{
 			get
 			{

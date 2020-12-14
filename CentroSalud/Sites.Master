@@ -5,25 +5,26 @@
 <html>
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Servicio de salud</title>
-    <link href="img/SaludValleLogo.png" rel="shorcut icon" />
+    <title>RVS</title>
+    <link href="img/Health-logo.png" rel="shorcut icon" />
     <asp:ContentPlaceHolder ID="head" runat="server">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-        <link href="css/Estilos_del_Sistema_PP.css" rel="stylesheet" />
+        <link href="css/Styles.css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Dosis&display=swap" rel="stylesheet">
         <script src="https://kit.fontawesome.com/11c72a119e.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <script src="js/Alertas.js"></script>
     </asp:ContentPlaceHolder>
 </head>
 <body>
-    <div>
-        <asp:ContentPlaceHolder ID="content" runat="server">
-        </asp:ContentPlaceHolder>
-    </div>
-    <asp:ContentPlaceHolder ID="script" runat="server">
+
+    <asp:ContentPlaceHolder ID="content" runat="server">
     </asp:ContentPlaceHolder>
+        <asp:ContentPlaceHolder ID="script" runat="server">
+    </asp:ContentPlaceHolder>
+
 </body>
 </html>

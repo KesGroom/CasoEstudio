@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace Logica
 {
-   public  class ClsRecomendacion
+    public class clsRecomendacion
     {
         public Object ConsultarTodos(int id)
         {
             ORMDataContext BD = new ORMDataContext();
             return from per in BD.recomendacion
                    where per.id_enfermedad == id
-                   select per
-                  
-                   
+                   select new
+                   {
+                       nmb = per.recomendacion_texto,
+                   }
                    ;
         }
     }

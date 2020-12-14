@@ -8,132 +8,43 @@ using Logica;
 
 namespace CentroSalud
 {
-    public partial class index : System.Web.UI.Page
+    public partial class Index : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            ClsCuidadDAO cuidadDAO = new ClsCuidadDAO();
-
-            ddlCuidad.DataSource = cuidadDAO.ConsultarTodos();
-            ddlCuidad.DataValueField = "id_ciudad";
-            ddlCuidad.DataTextField = "ciudad1";
-            ddlCuidad.DataBind();
-
-            ClsCuidadDAO cuidadDAOE = new ClsCuidadDAO();
-
-            ddlCuidadEspecialista.DataSource = cuidadDAOE.ConsultarTodos();
-            ddlCuidadEspecialista.DataValueField = "id_ciudad";
-            ddlCuidadEspecialista.DataTextField = "ciudad1";
-            ddlCuidadEspecialista.DataBind();
-
-
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
+        protected void btnLogin_Click(object sender, EventArgs e)
         {
-            if (int.Parse(TipoDeRol.SelectedValue.ToString()) == 0 || int.Parse(TipoDeRol.SelectedValue.ToString()) == 4)
+            clsPersona clspersona = new clsPersona();
+            persona person = new persona();
+            person = clspersona.login(TextIdentidad.Text, TextPass.Text);
+            if (person != null)
             {
-                persona personaDTO = new persona();
-                PersonaCls personaDAO = new PersonaCls();
-                int Identificicador = int.Parse(TextCedula.Text);
-                personaDTO.apellido = TextApellido.Text;
-                personaDTO.nombre = TextNombre.Text;
-                personaDTO.correo = TextCorreo.Text;
-                personaDTO.celular = TextCelular.Text;
-                personaDTO.cedula = Identificicador;
-                personaDTO.password = TextPassword.Text;
-                personaDTO.id_rol = 4; // Rol entidad de salud
-                personaDAO.RegistrarPersona(personaDTO);
+                Session["idPersona"] = person.cedula;
+                Session["nombre"] = person.nombre;
 
-                TextCelular.Text = "";
-                TextApellido.Text = "";
-                TextNombre.Text = "";
-                TextCedula.Text = "";
-                TextPassword.Text = "";
-                TextCorreo.Text = "";
-            }
-            if (int.Parse(TipoDeRol.SelectedValue.ToString()) == 2)
-            {
-                persona personaDTO = new persona();
-                PersonaCls personaDAO = new PersonaCls();
-                int Identificicador = int.Parse(TextCedula.Text);
-                personaDTO.apellido = TextApellido.Text;
-                personaDTO.nombre = TextNombre.Text;
-                personaDTO.correo = TextCorreo.Text;
-                personaDTO.celular = TextCelular.Text;
-                personaDTO.cedula = Identificicador;
-                personaDTO.password = TextPassword.Text;
-                personaDTO.id_rol = 2; // Rol entidad de salud
-                personaDAO.RegistrarPersona(personaDTO);
-                ente_salud EntesaludDto = new ente_salud();
-                ClsEntidadSaludDAO entidadSaludDAO = new ClsEntidadSaludDAO();
-                EntesaludDto.nit = int.Parse(TextNIT.Text);
-                EntesaludDto.razon_social = TextRazonSocial.Text;
-                EntesaludDto.representante = TextRepresentante.Text;
-                EntesaludDto.telefono = TextTelefono.Text;
-                EntesaludDto.sitio_web = TextSitioWeb.Text;
-                EntesaludDto.id_cuidad = int.Parse(ddlCuidad.SelectedValue.ToString());
-                EntesaludDto.capacidad_pacientes = int.Parse(TextCapacidadPacientes.Text);
-                entidadSaludDAO.RegistrarEntidad(EntesaludDto);
+                if (person.id_rol == 1)
+                {
+                    Session["uno"] = 1;
+                    Response.Redirect("dashAdmin.aspx", false);
+                }
+                else if (person.id_rol == 2)
+                {
+                    Response.Redirect("dashPersona.aspx", false);
+                }
+                else if (person.id_rol == 3)
+                {
+                    Response.Redirect("dashRepresentante.aspx", false);
 
-
+                }
 
             }
-            if (int.Parse(TipoDeRol.SelectedValue.ToString()) == 3)
+            else
             {
-                persona personaDTO = new persona();
-                PersonaCls personaDAO = new PersonaCls();
-                int Identificicador = int.Parse(TextCedula.Text);
-                personaDTO.apellido = TextApellido.Text;
-                personaDTO.nombre = TextNombre.Text;
-                personaDTO.correo = TextCorreo.Text;
-                personaDTO.celular = TextCelular.Text;
-                personaDTO.cedula = Identificicador;
-                personaDTO.password = TextPassword.Text;
-                personaDTO.id_rol = 3; // Rol entidad de salud
-                personaDAO.RegistrarPersona(personaDTO);
-
-
-                generador_contenido generadorcontenidoDTO = new generador_contenido();
-                ClsGeneradorContenido generadorContenidoDAO = new ClsGeneradorContenido();
-                generadorcontenidoDTO.id_persona = Identificicador;
-                generadorContenidoDAO.RegistrarGeneradorContenido(generadorcontenidoDTO);
+                Page.RegisterStartupScript("script", "<script languaje=JavaScript>AlertaPopUp('Datos incorrectos','La información suministrada no concuerda con nuestros registros, por favor valide la información e intente nuevamente.','error');</script>");
             }
-            if (int.Parse(TipoDeRol.SelectedValue.ToString()) == 5)
-            {
-                persona personaDTO = new persona();
-                PersonaCls personaDAO = new PersonaCls();
-                int Identificicador = int.Parse(TextCedula.Text);
-                personaDTO.apellido = TextApellido.Text;
-                personaDTO.nombre = TextNombre.Text;
-                personaDTO.correo = TextCorreo.Text;
-                personaDTO.celular = TextCelular.Text;
-                personaDTO.cedula = Identificicador;
-                personaDTO.password = TextPassword.Text;
-                personaDTO.id_rol = 3; // Rol entidad de salud
-                personaDAO.RegistrarPersona(personaDTO);
-
-                especialista especialistaDTO = new especialista();
-                ClsEspecialidadDAO especialidadDAo = new ClsEspecialidadDAO();
-                especialistaDTO.id_persona = Identificicador;
-                especialistaDTO.id_ciudad = int.Parse(ddlCuidadEspecialista.SelectedValue.ToString());
-                especialistaDTO.especialidad = TextEspecialidad.Text;
-                especialistaDTO.numero_de_licencia_de_salud = TextNumeroLicencia.Text;
-                especialistaDTO.fecha_de_expedicion = Convert.ToDateTime(TextFechaExpedicion.Text);
-                especialidadDAo.RegistrarEspecialidad(especialistaDTO);
-
-            }
-
-            Page.RegisterStartupScript("script", "<script languaje=JavaScript>AlertaToast('Registro exitoso','success');</script>");
-
         }
-
-        protected void ddlCuidadEspecialista_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
     }
 }

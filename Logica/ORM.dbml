@@ -1,15 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="SaludValle" Class="ORMDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=KESITO;Initial Catalog=SaludValle;Integrated Security=True" SettingsObjectName="Logica.Properties.Settings" SettingsPropertyName="SaludValleConnectionString1" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BDSalud" Class="ORMDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=KESITO;Initial Catalog=BDSalud;Integrated Security=True" SettingsObjectName="Logica.Properties.Settings" SettingsPropertyName="BDSaludConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.cita" Member="cita">
     <Type Name="cita">
       <Column Name="id_cita" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="id_persona" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="id_persona" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="id_especialista" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="fecha_cita" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="fecha_cita" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
       <Column Name="hora_cita" Type="System.TimeSpan" DbType="Time NOT NULL" CanBeNull="false" />
       <Column Name="calificacion" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="estado" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Association Name="especialista_cita" Member="especialista" ThisKey="id_especialista" OtherKey="id_persona" Type="especialista" IsForeignKey="true" />
+      <Association Name="especialista_cita" Member="especialista" ThisKey="id_especialista" OtherKey="id_especialista" Type="especialista" IsForeignKey="true" />
       <Association Name="persona_cita" Member="persona" ThisKey="id_persona" OtherKey="cedula" Type="persona" IsForeignKey="true" />
     </Type>
   </Table>
@@ -31,7 +30,8 @@
   <Table Name="dbo.enfermedad" Member="enfermedad">
     <Type Name="enfermedad">
       <Column Name="id_enfermedad" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="nombre" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="nombre" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="descripcion" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Association Name="enfermedad_enfermedad_sintoma" Member="enfermedad_sintoma" ThisKey="id_enfermedad" OtherKey="id_enfermedad" Type="enfermedad_sintoma" />
       <Association Name="enfermedad_recomendacion" Member="recomendacion" ThisKey="id_enfermedad" OtherKey="id_enfermedad" Type="recomendacion" />
     </Type>
@@ -47,43 +47,36 @@
   </Table>
   <Table Name="dbo.ente_salud" Member="ente_salud">
     <Type Name="ente_salud">
-      <Column Name="nit" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="razon_social" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="nit" Type="System.String" DbType="VarChar(30) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="razon_social" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="representante" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="telefono" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
-      <Column Name="sitio_web" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="sitio_web" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="id_cuidad" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="capacidad_pacientes" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="ente_salud_especialista" Member="especialista" ThisKey="nit" OtherKey="id_ente_salud" Type="especialista" />
-      <Association Name="ente_salud_generador_contenido" Member="generador_contenido" ThisKey="nit" OtherKey="id_ente_salud" Type="generador_contenido" />
       <Association Name="ciudad_ente_salud" Member="ciudad" ThisKey="id_cuidad" OtherKey="id_ciudad" Type="ciudad" IsForeignKey="true" />
+      <Association Name="persona_ente_salud" Member="persona" ThisKey="representante" OtherKey="cedula" Type="persona" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.especialista" Member="especialista">
     <Type Name="especialista">
-      <Column Name="id_persona" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="id_especialista" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="id_persona" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="id_ciudad" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="id_ente_salud" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="id_ente_salud" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
       <Column Name="numero_de_licencia_de_salud" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
       <Column Name="fecha_de_expedicion" Type="System.DateTime" DbType="Date" CanBeNull="true" />
       <Column Name="especialidad" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
-      <Association Name="especialista_cita" Member="cita" ThisKey="id_persona" OtherKey="id_especialista" Type="cita" />
+      <Association Name="especialista_cita" Member="cita" ThisKey="id_especialista" OtherKey="id_especialista" Type="cita" />
       <Association Name="ciudad_especialista" Member="ciudad" ThisKey="id_ciudad" OtherKey="id_ciudad" Type="ciudad" IsForeignKey="true" />
       <Association Name="ente_salud_especialista" Member="ente_salud" ThisKey="id_ente_salud" OtherKey="nit" Type="ente_salud" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.generador_contenido" Member="generador_contenido">
-    <Type Name="generador_contenido">
-      <Column Name="id_generador_contenido" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="id_persona" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="id_ente_salud" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="ente_salud_generador_contenido" Member="ente_salud" ThisKey="id_ente_salud" OtherKey="nit" Type="ente_salud" IsForeignKey="true" />
-      <Association Name="persona_generador_contenido" Member="persona" ThisKey="id_persona" OtherKey="cedula" Type="persona" IsForeignKey="true" />
+      <Association Name="persona_especialista" Member="persona" ThisKey="id_persona" OtherKey="cedula" Type="persona" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.persona" Member="persona">
     <Type Name="persona">
-      <Column Name="cedula" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="cedula" Type="System.String" DbType="VarChar(30) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="id_rol" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="nombre" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="apellido" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
@@ -91,7 +84,8 @@
       <Column Name="celular" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="password" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Association Name="persona_cita" Member="cita" ThisKey="cedula" OtherKey="id_persona" Type="cita" />
-      <Association Name="persona_generador_contenido" Member="generador_contenido" ThisKey="cedula" OtherKey="id_persona" Type="generador_contenido" />
+      <Association Name="persona_ente_salud" Member="ente_salud" ThisKey="cedula" OtherKey="representante" Type="ente_salud" />
+      <Association Name="persona_especialista" Member="especialista" ThisKey="cedula" OtherKey="id_persona" Type="especialista" />
       <Association Name="rol_persona" Member="rol" ThisKey="id_rol" OtherKey="id_rol" Type="rol" IsForeignKey="true" />
     </Type>
   </Table>
@@ -111,10 +105,10 @@
     </Type>
   </Table>
   <Function Name="dbo.sp_login" Method="sp_login">
-    <Parameter Name="cedula" Type="System.Int32" DbType="Int" />
+    <Parameter Name="cedula" Type="System.String" DbType="VarChar(30)" />
     <Parameter Name="contrasenia" Type="System.String" DbType="VarChar(50)" />
     <ElementType Name="sp_loginResult">
-      <Column Name="cedula" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="cedula" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="id_rol" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="nombre" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="apellido" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />

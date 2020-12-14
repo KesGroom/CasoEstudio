@@ -26,31 +26,10 @@ namespace Logica.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=JULIAN-PC\\SQLEXPRESS;Initial Catalog=salud;Integrated Security=True")]
-        public string saludConnectionString {
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=KESITO;Initial Catalog=BDSalud;Integrated Security=True")]
+        public string BDSaludConnectionString {
             get {
-                return ((string)(this["saludConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=JULIAN-PC\\SQLEXPRESS;Initial Catalog=SaludValle;Integrated Security=T" +
-            "rue")]
-        public string SaludValleConnectionString {
-            get {
-                return ((string)(this["SaludValleConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=KESITO;Initial Catalog=SaludValle;Integrated Security=True")]
-        public string SaludValleConnectionString1 {
-            get {
-                return ((string)(this["SaludValleConnectionString1"]));
+                return ((string)(this["BDSaludConnectionString"]));
             }
         }
     }

@@ -14,29 +14,31 @@ namespace CentroSalud
         {
             if (!IsPostBack)
             {
-            ClsEnfermedadDAO enfermedadDAO = new ClsEnfermedadDAO();
+                clsEnfermedad enfermedadDAO = new clsEnfermedad();
 
-            ddlEnfermedad.DataSource = enfermedadDAO.ConsultarTodos();
-            ddlEnfermedad.DataValueField = "id_sintoma";
-            ddlEnfermedad.DataTextField = "nombre";
-            ddlEnfermedad.DataBind();
+                ddlEnfermedad.DataSource = enfermedadDAO.ConsultarTodos();
+                ddlEnfermedad.DataValueField = "id_sintoma";
+                ddlEnfermedad.DataTextField = "nombre";
+                ddlEnfermedad.DataBind();
             }
-        }
-
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            ConsultarContactos();
-        }
-        private void ConsultarContactos()
-        {
-            ClsRecomendacion recomendacionDAO = new ClsRecomendacion();
-            GvRecomendacion.DataSource = recomendacionDAO.ConsultarTodos(int.Parse(ddlEnfermedad.SelectedValue.ToString()));
-            GvRecomendacion.DataBind();//Mostrar Datos
-        }
-
-        protected void GvRecomendacion_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
         }
+            protected void btnConsultar_Click(object sender, EventArgs e)
+            {
+                ConsultarContactos();
+            }
+            private void ConsultarContactos()
+            {
+                clsEnfermedad enfermedadDAO = new clsEnfermedad();
+            TextDescription.Text = enfermedadDAO.obtenerDescripcion(int.Parse(ddlEnfermedad.SelectedValue.ToString()));    
+
+                clsRecomendacion recomendacionDAO = new clsRecomendacion();
+                GvRecomendacion.DataSource = recomendacionDAO.ConsultarTodos(int.Parse(ddlEnfermedad.SelectedValue.ToString()));
+                GvRecomendacion.DataBind();
+
+                clsSintoma sintomaDao = new clsSintoma();
+                GvSintoma.DataSource = sintomaDao.ConsultarTodos(int.Parse(ddlEnfermedad.SelectedValue.ToString()));
+                GvSintoma.DataBind();
+            }
     }
 }
